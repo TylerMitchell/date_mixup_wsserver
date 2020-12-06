@@ -45,7 +45,7 @@ io.use((socket, next) => {
         next(new Error("No token *test* provided"));
     }
     else{
-        console.log("Before jwt decode");
+        console.log("Before jwt decode: ", jwt.decode(sessionToken) );
         jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
             if(decoded){
                 console.log("after jwt decode");
