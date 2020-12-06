@@ -12,13 +12,7 @@ let jwt = require('jsonwebtoken');
 const { User } = require("./models");
 
 console.log("before cors!");
-let io = socketIO(http, {
-    cors: { 
-        origin: "*",
-        optionsSuccessStatus: 200,
-        credentials: true
-    }
-});
+let io = socketIO(http);
 console.log("before middleware!");
 // io.use((socket, next) => {
 //     console.log("start of middleware: ");
