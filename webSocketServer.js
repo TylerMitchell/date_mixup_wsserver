@@ -38,19 +38,22 @@ io.on('connection', (socket) => {
 setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 setInterval(() => io.emit('message', new Date().toTimeString()), 1000);
 io.use((socket, next) => {
-    console.log("start of middleware: ", socket.handshake);
+    console.log("start of middleware: ");
     const sessionToken = socket.handshake.auth.token;
     console.log("hit the socket.io auth function!: ", sessionToken);
     if( !sessionToken ) {
         next(new Error("No token *test* provided"));
     }
     else{
+        console.log("Before jwt decode");
         jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
             if(decoded){
+                console.log("after jwt decode");
                 User.findOne({ where: { id: decoded.id } }).then( (user) => {
-
+                    console.log("User retrieved successfully");
                     user.getProfiles().then( (profiles) => { 
                         if( profiles[0].id ){
+                            console.log("Profile retrieved successfully");
                             socket.profile = profiles[0];
                             socket.user = user;
                             next();
