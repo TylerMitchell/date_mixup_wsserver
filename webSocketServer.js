@@ -36,6 +36,7 @@ io.on('connection', (socket) => {
 });
 
 setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
+setInterval(() => io.emit('message', new Date().toTimeString()), 1000);
 // console.log("before cors!");
 // let io = socketIO(http, {
 //     cors: { 
