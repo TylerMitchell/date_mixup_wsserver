@@ -11,6 +11,7 @@ http.listen( process.env.PORT, () => { console.log("vanilla http server here!");
 let jwt = require('jsonwebtoken');
 const { User } = require("./models");
 
+console.log("before cors!");
 let io = socketIO(http, {
     cors: { 
         origin: "http://localhost:3000, https://date-mixup.herokuapp.com",
@@ -18,8 +19,9 @@ let io = socketIO(http, {
         credentials: true
     }
 });
-
+console.log("before middleware!");
 io.use((socket, next) => {
+    console.log("start of middleware: ", socket.handshake);
     const sessionToken = socket.handshake.auth.token;
     console.log("hit the socket.io auth function!");
     if( !sessionToken ) {
@@ -44,7 +46,7 @@ io.use((socket, next) => {
 });
 
 io.sockets.on('connection', function(socket) {
-    console.log(io.sockets.adapter.sids);
+    console.log("Start of connection: ", io.sockets.adapter.sids);
 
     socket.on("Join Event", (eventName) => {
         socket.join(eventName);
