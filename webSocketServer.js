@@ -2,12 +2,12 @@ require('dotenv').config();
 require("./models/associations");
 let db = require("./db");
 let os = require('os');
-let socketIO = require('socket.io');
+// let socketIO = require('socket.io');
 
-let app = require("express")();
-let http = require("http").createServer(app);
+// let app = require("express")();
+// let http = require("http").createServer(app);
 
-http.listen( process.env.PORT, () => { console.log("vanilla http server here!"); } );
+// http.listen( process.env.PORT, () => { console.log("vanilla http server here!"); } );
 let jwt = require('jsonwebtoken');
 const { User } = require("./models");
 
