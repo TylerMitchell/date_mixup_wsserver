@@ -21,7 +21,7 @@ let io = socketIO(http, {
 });
 console.log("before middleware!");
 io.use((socket, next) => {
-    console.log("start of middleware: ", socket.handshake);
+    console.log("start of middleware: ");
     const sessionToken = socket.handshake.auth.token;
     console.log("hit the socket.io auth function!");
     if( !sessionToken ) {
@@ -46,7 +46,7 @@ io.use((socket, next) => {
 });
 
 io.sockets.on('connection', function(socket) {
-    console.log("Start of connection: ", io.sockets.adapter.sids);
+    console.log("Start of connection: ");
 
     socket.on("Join Event", (eventName) => {
         socket.join(eventName);
