@@ -37,39 +37,30 @@ io.on('connection', (socket) => {
 
 setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 setInterval(() => io.emit('message', new Date().toTimeString()), 1000);
-// console.log("before cors!");
-// let io = socketIO(http, {
-//     cors: { 
-//         origin: "*",
-//         optionsSuccessStatus: 200,
-//         credentials: true
-//     }
-// });
-// console.log("before middleware!");
-// io.use((socket, next) => {
-//     console.log("start of middleware: ");
-//     const sessionToken = socket.handshake.auth.token;
-//     console.log("hit the socket.io auth function!");
-//     if( !sessionToken ) {
-//         next(new Error("No token *test* provided"));
-//     }
-//     else{
-//         jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
-//             if(decoded){
-//                 User.findOne({ where: { id: decoded.id } }).then( (user) => {
+io.use((socket, next) => {
+    console.log("start of middleware: ");
+    const sessionToken = socket.handshake.auth.token;
+    console.log("hit the socket.io auth function!");
+    if( !sessionToken ) {
+        next(new Error("No token *test* provided"));
+    }
+    else{
+        jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
+            if(decoded){
+                User.findOne({ where: { id: decoded.id } }).then( (user) => {
 
-//                     user.getProfiles().then( (profiles) => { 
-//                         if( profiles[0].id ){
-//                             socket.profile = profiles[0];
-//                             socket.user = user;
-//                             next();
-//                         } else{ next(new Error("No Profile Found for user!")); }
-//                     });
-//                 }, () => { next(new Error("Not Authorized!")); });
-//             } else { next(new Error("Not Authorized!")); }
-//         });
-//     }
-// });
+                    user.getProfiles().then( (profiles) => { 
+                        if( profiles[0].id ){
+                            socket.profile = profiles[0];
+                            socket.user = user;
+                            next();
+                        } else{ next(new Error("No Profile Found for user!")); }
+                    });
+                }, () => { next(new Error("Not Authorized!")); });
+            } else { next(new Error("Not Authorized!")); }
+        });
+    }
+});
 
 io.sockets.on('connection', function(socket) {
     console.log("Start of connection: ");
