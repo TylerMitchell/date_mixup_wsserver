@@ -88,7 +88,7 @@ io.sockets.on('connection', function(socket) {
                 if(match.length == 2){ //create a room id and add both sockets to that room, then emit a message to both users
                     let me = match[0];
                     let you = match[1];
-                    let room = me.profile.screenName + you.profile.screenName;
+                    let room = "meyou"; //me.profile.screenName + you.profile.screenName;
                     me.join(room);
                     you.join(room);
                     me.partnerSocket = you;
