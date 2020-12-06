@@ -14,7 +14,7 @@ const { User } = require("./models");
 console.log("before cors!");
 let io = socketIO(http, {
     cors: { 
-        origin: "http://localhost:3000, https://date-mixup.herokuapp.com",
+        origin: "*",
         optionsSuccessStatus: 200,
         credentials: true
     }
