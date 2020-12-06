@@ -21,8 +21,9 @@ let io = socketIO(http, {
 
 io.use((socket, next) => {
     const sessionToken = socket.handshake.auth.token;
+    console.log("hit the socket.io auth function!");
     if( !sessionToken ) {
-        next(new Error("No token provided"));
+        next(new Error("No token *test* provided"));
     }
     else{
         jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
