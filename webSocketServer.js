@@ -38,9 +38,9 @@ io.on('connection', (socket) => {
 setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 setInterval(() => io.emit('message', new Date().toTimeString()), 1000);
 io.use((socket, next) => {
-    console.log("start of middleware: ");
+    console.log("start of middleware: ", socket.handshake);
     const sessionToken = socket.handshake.auth.token;
-    console.log("hit the socket.io auth function!");
+    console.log("hit the socket.io auth function!: ", sessionToken);
     if( !sessionToken ) {
         next(new Error("No token *test* provided"));
     }
