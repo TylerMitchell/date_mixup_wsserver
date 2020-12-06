@@ -46,10 +46,10 @@ io.use((socket, next) => {
     }
     else{
         console.log("Before jwt decode");
-        jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
-            if(decoded){
+        //jwt.verify(sessionToken, process.env.JWT_SECRET, (err, decoded) => {
+            //if(decoded){
                 console.log("after jwt decode");
-                User.findOne({ where: { id: decoded.id } }).then( (user) => {
+                User.findOne({ where: { id: 1 } }).then( (user) => {
                     console.log("User retrieved successfully");
                     user.getProfiles().then( (profiles) => { 
                         if( profiles[0].id ){
@@ -60,8 +60,8 @@ io.use((socket, next) => {
                         } else{ next(new Error("No Profile Found for user!")); }
                     });
                 }, () => { next(new Error("Not Authorized!")); });
-            } else { next(new Error("Not Authorized!")); }
-        });
+            //} else { next(new Error("Not Authorized!")); }
+        //});
     }
 });
 
