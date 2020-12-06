@@ -97,7 +97,7 @@ io.sockets.on('connection', function(socket) {
     });
 
     //relay messages to other socket
-    socket.on("Offer", (sessionDescription) => { console.log("Hit Offer Relay", socket); if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("Offer", sessionDescription); } })
+    socket.on("Offer", (sessionDescription) => { console.log("Hit Offer Relay"); if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("Offer", sessionDescription); } })
     socket.on("Answer", (sessionDescription) => { console.log("Hit Answer Relay"); if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("Answer", sessionDescription); } })
     socket.on("Candidate", (candidate) => { console.log("Hit Candidate Relay"); if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("Candidate", candidate); } })
     
