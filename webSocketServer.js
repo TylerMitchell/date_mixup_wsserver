@@ -29,7 +29,9 @@ const server = express()
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
 
   //get STUN/TURN server info
+  console.log("before token");
 client.tokens.create().then( (token) => { 
+    console.log("after token: ", token);
     iceServers = token.iceServers;
     io = socketIO(server, {
         cors: {
