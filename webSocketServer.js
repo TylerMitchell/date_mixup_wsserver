@@ -86,9 +86,13 @@ io.sockets.on('connection', function(socket) {
                     console.log("room: ", room);
                     me.join(room);
                     you.join(room);
+                    me.isInDate = true;
+                    you.isInDate = true;
                     me.partnerSocket = you;
                     you.partnerSocket = me;
                     me.emit("Initiate Date");
+                    me.emit("Other Profile", you.profile); //should care about limiting shared info in future TODO
+                    you.emit("Other Profile", me.profile)
                     io.to(room).emit("message", "Found Date");
                     match = [];
                 }
@@ -101,6 +105,19 @@ io.sockets.on('connection', function(socket) {
     socket.on("Answer", (sessionDescription) => { console.log("Hit Answer Relay"); if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("Answer", sessionDescription); } })
     socket.on("Candidate", (candidate) => { console.log("Hit Candidate Relay"); if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("Candidate", candidate); } })
     
+    socket.on("End Date Client", (closeData) => { 
+        if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("End Date Client", closeData); } 
+        socket.leave( socket.profile.screenName + socket.partnerSocket.profile.screenName );
+        socket.leave( socket.partnerSocket.profile.screenName + socket.profile.screenName );
+        socket.isInDate = false;
+        //socket.partnerSocket = null;
+    });
+
+    socket.on("Contact Exchange Requested", (requestId) => { 
+        if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("Contact Exchange Requested", requestId); }
+        else{ console.log("Partner Socket was null in Contact Exchange Requested!"); }
+    });
+
     // handle the event sent with socket.send()
     socket.on('message', (data) => {
         console.log(data);
