@@ -80,7 +80,7 @@ client.tokens.create().then( (token) => {
     io.sockets.on('connection', function(socket) {
         console.log("Start of connection: ");
     
-        socket.emit("TURN Servers", iceServers);
+        socket.on("Get TURN Servers", () => { socket.emit("TURN Servers", iceServers); });
         
         socket.on("Join Event", (eventName) => {
             socket.join(eventName);
@@ -130,6 +130,24 @@ client.tokens.create().then( (token) => {
         socket.on("Contact Exchange Requested", (requestId) => { 
             if(socket.partnerSocket){ io.to(socket.partnerSocket.id).emit("Contact Exchange Requested", requestId); }
             else{ console.log("Partner Socket was null in Contact Exchange Requested!"); }
+        });
+
+        socket.on("Check Online Status For Profiles", (profileIdArr) => {
+            onlineIds = [];
+            io.sockets.sockets.forEach( (sock, sid) => { 
+                console.log("Profile loop: ", sock.profile);
+                onlineIds.push( sock.profile.id ); 
+            })
+            console.log("Online Id's: ", onlineIds);
+            console.log("Profile Id Array: ", profileIdArr);
+            onlineFriends = onlineIds.filter(id => profileIdArr.includes(id));
+            console.log("Online Friends: ", onlineFriends);
+            socket.emit("Online Profiles", onlineFriends);
+        });
+
+        socket.on("Send Message", (message) => {
+            //hack for demo!!!
+            socket.broadcast.emit("Got Message", message);
         });
     
         // handle the event sent with socket.send()
